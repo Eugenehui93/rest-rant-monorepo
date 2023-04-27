@@ -17,22 +17,25 @@ function LoginForm() {
 
     async function handleSubmit(e) {
         e.preventDefault()
-        const response = await fetch (`http://localhost:5000/authentication/`,{
+        //* Fetching for login
+        const response = await fetch(`http://localhost:5000/authentication/`, {
             method: 'POST',
-            headers:{
+            headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(credentials)
         })
-       const data = await response.json()
 
-       if (response.status === 200){
-        setCurrentUser(data.user)
-        history.push(`/`)
-       }
-       else{
-        setErrorMessage(data.message)
-       }
+        const data = await response.json()
+        // * Handling log in in the front end
+        if (response.status === 200) {
+            setCurrentUser(data.user)
+            // saving into local storage
+            localStorage.setItem('token', data.token)
+            history.push(`/`)
+        } else {
+            setErrorMessage(data.message)
+        }
 
     }
 
